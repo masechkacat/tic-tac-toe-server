@@ -1,0 +1,86 @@
+asyncapi: 2.4.0
+info:
+  title: Tic Tac Toe WebSocket API
+  version: 1.0.0
+  description: This API allows real-time interaction in a Tic Tac Toe game via WebSockets.
+  contact:
+    name: masechkacat
+    url: 'https://www.mt-dev.online/'
+    email: masechkacat@gmail.com
+
+servers:
+  local:
+    url: ws://localhost:3000
+    protocol: ws
+    description: Local development server for Tic Tac Toe.
+
+channels:
+  '/':
+    subscribe:
+      summary: Receive updates from the server, including game state and messages.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/GameUpdate'
+          - $ref: '#/components/messages/Message'
+          - $ref: '#/components/messages/GameOver'
+          - $ref: '#/components/messages/Error'
+    publish:
+      summary: Send moves to the server.
+      message:
+        $ref: '#/components/messages/Move'
+
+components:
+  messages:
+    GameUpdate:
+      payload:
+        type: object
+        properties:
+          result:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ['continue', 'win', 'draw']
+              board:
+                type: array
+                items:
+                  type: string
+                  nullable: true
+                  enum: [null, 'X', 'O']
+              currentPlayer:
+                type: string
+              playerIds:
+                type: array
+                items:
+                  type: string
+
+    Message:
+      payload:
+        type: object
+        properties:
+          text:
+            type: string
+
+    GameOver:
+      payload:
+        type: object
+        properties:
+          text:
+            type: string
+
+    Move:
+      payload:
+        type: object
+        properties:
+          index:
+            type: integer
+            minimum: 0
+            maximum: 8
+
+    Error:
+      payload:
+        type: object
+        properties:
+          message:
+            type: string
+            
