@@ -26,4 +26,4 @@ jobs:
       with:
         branch: gh-pages  # branch to deploy the documentation
         folder: generated-docs  # folder with the generated documentation
-        token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token to authenticate the deployment
+        token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # GitHub token to authenticate the deployment
