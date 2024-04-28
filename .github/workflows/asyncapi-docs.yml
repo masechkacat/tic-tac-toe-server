@@ -1,0 +1,29 @@
+name: Generate AsyncAPI Documentation
+
+on:
+  push:
+    branches:
+      - main  # activate the workflow on push to the main branch
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest  # choose the operating system for the job
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # step to checkout the repository
+
+    - name: Generate HTML documentation
+      uses: asyncapi/github-action-for-cli@v3.1.1
+      with:
+        command: generate
+        filepath: './asyncapi.yaml'  # path to the AsyncAPI file
+        template: '@asyncapi/html-template@0.9.0'  # template for the documentation
+        output: './generated-docs'  # path to the folder where the documentation will be generated
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.0
+      with:
+        branch: gh-pages  # branch to deploy the documentation
+        folder: generated-docs  # folder with the generated documentation
+        token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token to authenticate the deployment
