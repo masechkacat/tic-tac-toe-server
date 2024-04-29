@@ -44,7 +44,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
    * @param client - The connected socket client.
    */
   handleConnection(@ConnectedSocket() client: Socket) {
-    console.log(`Client connected: ${client.id}`);
     const gameStatus = this.gameService.addPlayer(client.id);
     if (gameStatus === 'waiting') {
       client.emit('message', { text: GameMessages.Waiting });
@@ -73,7 +72,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleMove(@ConnectedSocket() client: Socket, @MessageBody() data: MoveDto) {
     try {
       const result = this.gameService.makeMove(client.id, data.index);
-      console.log(result);
       if (result) {
         result.playerIds.forEach((playerId) => {
           this.server.to(playerId).emit('gameUpdated', { result });
