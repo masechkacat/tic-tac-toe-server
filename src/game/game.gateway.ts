@@ -29,12 +29,7 @@ import { GameMessages } from './game.const';
  *
  * @MessageBody is a decorator that injects the client-sent data transferred within the message.
  */
-@WebSocketGateway({
-  cors: {
-    origin: 'http://127.0.0.1:5500',
-    credentials: true,
-  },
-})
+@WebSocketGateway({ cors: true })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
